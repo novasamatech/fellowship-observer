@@ -32,6 +32,6 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           message: |
-            😕 Novasama-collective salary and/or memebers bump failed, see logs for details:
+            😕 Novasama-collectives salary and/or memebers bump failed, see logs for details:
 
             Github run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
