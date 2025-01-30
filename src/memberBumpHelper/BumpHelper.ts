@@ -28,28 +28,4 @@ export abstract class BumpHelper {
      * @returns A promise that resolves when salary cycle is bumped.
      */
     public abstract bumpSalaryCycle(sender): Promise<void>;
-
-
-    /**
-     * Method to retry API calls in case of failure.
-     * @param apiCall - The API call to retry.
-     * @param maxRetries - The maximum number of retries.
-     * @param retry_timeout - The timeout between retries.
-     * @returns A promise that resolves with the result of the API call.
-     */
-    public async retryApiCall<T>(apiCall: () => Promise<T>, maxRetries: number = 3, retry_timeout: number = 2000): Promise<T> {
-        for (let i = 0; i < maxRetries; i++) {
-            try {
-                return await apiCall();
-            } catch (error) {
-                console.error(`Attempt ${i+1} failed with error: ${error}`);
-                await this.api.connect();
-                await new Promise(resolve => setTimeout(resolve, retry_timeout));
-                if (i === maxRetries - 1) {
-                    throw new Error(`Failed after ${maxRetries} attempts: ${error}`);
-                }
-            }
-        }
-        throw new Error('All retries failed');
-    }
 }
