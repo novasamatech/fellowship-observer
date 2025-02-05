@@ -70,7 +70,11 @@ export class FellowshipBumper extends BumpHelper {
         return block.header.number.toNumber();
     }
 
-    private async mayBeBumped(rank, memberInfo, currentBlockNumber) {
+    private async mayBeBumped(
+        rank: number,
+        memberInfo: { isActive: boolean; lastProof: number },
+        currentBlockNumber: number
+    ): Promise<boolean> {
         if (!memberInfo.isActive) {
             return false;
         }
@@ -78,8 +82,6 @@ export class FellowshipBumper extends BumpHelper {
         const {rankMinPromotionPeriod, rankDemotionPeriod} = await this.getRankPromotionAndDemotionPeriod(rank);
 
         return rankDemotionPeriod > 0 && currentBlockNumber - memberInfo.lastProof > rankDemotionPeriod;
-
-
     }
 
     private async getRankPromotionAndDemotionPeriod(rank: number) {
@@ -92,13 +94,13 @@ export class FellowshipBumper extends BumpHelper {
         return {rankMinPromotionPeriod, rankDemotionPeriod};
     }
 
-    private async loadFellowshipParams() {
+    private async loadFellowshipParams(): Promise<void> {
         const params = await this.api.query['fellowshipCore'].params();
         const paramsJson = params.toJSON();
         this.params = paramsJson;
     }
 
-    private async bumpAccounts(accounts: string[], sender) {
+    private async bumpAccounts(accounts: string[], sender): Promise<void> {
         console.log(`Bumping accounts ${accounts}`);
         let transaction;
         if (accounts.length > 1) {
