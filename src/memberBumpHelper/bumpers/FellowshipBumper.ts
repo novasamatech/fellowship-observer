@@ -76,13 +76,17 @@ export class FellowshipBumper extends BumpHelper {
         memberInfo: { isActive: boolean; lastProof: number },
         currentBlockNumber: number
     ): Promise<boolean> {
-        if (!memberInfo.isActive) {
+        if (this.isEligableForBump(memberInfo)) {
             return false;
         }
 
         const rankDemotionPeriod = await this.getRankPromotionAndDemotionPeriod(rank);
 
         return rankDemotionPeriod > 0 && currentBlockNumber - memberInfo.lastProof > rankDemotionPeriod;
+    }
+
+    private isEligableForBump(memberInfo: { isActive: boolean; lastProof: number }) {
+        return !memberInfo.isActive;
     }
 
     private async getRankPromotionAndDemotionPeriod(rank: number): Promise<number> {
