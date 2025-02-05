@@ -1,4 +1,4 @@
-name: Make astar payouts
+name: Bump Fellowship members and salary
 
 on:
   workflow_dispatch:

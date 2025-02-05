@@ -33,7 +33,8 @@ export class FellowshipBumper extends BumpHelper {
         let accountsToBump: string[] = [];
         for (const [{args: [account]}, value] of members) {
             let fellowInfo = JSON.parse(value.toString());
-            let mayBeBumped = await this.mayBeBumped(memberRanksMap.get(account.toString()), fellowInfo, currentBlockNumber);
+            let rank = Number(memberRanksMap.get(account.toString()) || 0);
+            let mayBeBumped = await this.mayBeBumped(rank, fellowInfo, currentBlockNumber);
             if (mayBeBumped) {
                 accountsToBump.push(account.toString());
             }
@@ -79,19 +80,18 @@ export class FellowshipBumper extends BumpHelper {
             return false;
         }
 
-        const {rankMinPromotionPeriod, rankDemotionPeriod} = await this.getRankPromotionAndDemotionPeriod(rank);
+        const rankDemotionPeriod = await this.getRankPromotionAndDemotionPeriod(rank);
 
         return rankDemotionPeriod > 0 && currentBlockNumber - memberInfo.lastProof > rankDemotionPeriod;
     }
 
-    private async getRankPromotionAndDemotionPeriod(rank: number) {
+    private async getRankPromotionAndDemotionPeriod(rank: number): Promise<number> {
         if (!this.params) {
             await this.loadFellowshipParams();
         }
 
-        const rankMinPromotionPeriod = this.params['minPromotionPeriod'][rank-1];
         const rankDemotionPeriod = this.params['demotionPeriod'][rank-1];
-        return {rankMinPromotionPeriod, rankDemotionPeriod};
+        return rankDemotionPeriod;
     }
 
     private async loadFellowshipParams(): Promise<void> {

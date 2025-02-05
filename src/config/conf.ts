@@ -30,7 +30,7 @@ export class FellowshipConfig extends BaseNetworkConfig {
 }
 
 /**
- * Class for Astar network configuration.
+ * Class for Novasama-collective network configuration.
  */
 export class NovasamaConfig extends BaseNetworkConfig {
 

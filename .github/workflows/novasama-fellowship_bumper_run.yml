@@ -1,4 +1,4 @@
-name: Make kilt payouts
+name: Bump Novasmaa-Fellowship members and salary
 
 on:
   workflow_dispatch:
