@@ -1,0 +1,1 @@
+export { FellowshipBumper } from './FellowshipBumper'

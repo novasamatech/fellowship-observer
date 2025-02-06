@@ -1,9 +1,8 @@
 import { SubstrateConnection } from './connection';
-import { RelaychainConfig, config } from './config/conf';
+import { config } from './config/conf';
 import { Sender } from './utils';
-import { getPayoutHelper } from './payoutHelper/PayoutFabric';
-import { VoteHelper } from './voteHelper';
 import { configManager } from './config/ConfigManager';
+import {getBumpHelper} from "./memberBumpHelper/BumpFabric";
 
 interface Connections {
     [network: string]: SubstrateConnection;
@@ -13,11 +12,11 @@ async function main(): Promise<void> {
     const networkType = process.argv[2];
 
     let connections: Connections = {}
-    if (!config.payoutAccount) {
-        throw new Error('Payout Account does not set, please provide PAYOUTS_ACCOUNT_MNEMONIC variable')
+    if (!config.bumpAccount) {
+        throw new Error('Payout Account does not set, please provide BUMP_ACCOUNT_MNEMONIC variable')
     }
 
-    const sender = new Sender(config.payoutAccount)
+    const sender = new Sender(config.bumpAccount)
 
     const filteredNetworks = configManager(networkType, config)
 
@@ -25,18 +24,14 @@ async function main(): Promise<void> {
         // Create connection
         const connection = new SubstrateConnection(network.endpoint);
         await connection.connect();
-        connections[network.name] = connection
+        connections[network.name] = connection;
         console.log(`Connected to ${network.name} network`);
 
-        // Payout rewards
-        const payout = getPayoutHelper(network, connections[network.name]);
-        await payout.payoutRewards(network.validators, sender.generateKeyringPair(), false)
+        // Bump Fellowship members and salary
+        const memberBumpHelper = getBumpHelper(network, connections[network.name]);
+        await memberBumpHelper.bumpMembers(sender.generateKeyringPair());
+        await memberBumpHelper.bumpSalaryCycle(sender.generateKeyringPair());
 
-        // OpenGov voting
-        if (network instanceof RelaychainConfig) {
-            const voter = new VoteHelper(connections[network.name]);
-            await voter.checkVotes(network, sender.generateKeyringPair())
-        }
 
         // Close connection
         await connection.disconnect();

@@ -9,7 +9,7 @@ export class Sender {
 
     generateKeyringPair(): any {
         const keyring = new Keyring();
-        const pair = keyring.createFromUri(this.mnemonic, undefined, 'sr25519');
+        const pair = keyring.createFromUri(this.mnemonic, {}, 'sr25519');
         return pair;
     }
 

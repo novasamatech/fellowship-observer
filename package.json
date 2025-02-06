@@ -4,12 +4,12 @@
   "description": "Automate payouts",
   "main": "App.ts",
   "scripts": {
-    "start:relaychain": "ts-node src/App.ts 'Relaychain'",
-    "start:astar": "ts-node src/App.ts 'Astar'",
-    "start:kilt": "ts-node src/App.ts 'Kilt'"
+    "start:fellowship": "ts-node src/App.ts 'Fellowship-Collectives'",
+    "start:novasama": "ts-node src/App.ts 'Novasama-Collectives'"
   },
   "dependencies": {
-    "@polkadot/api": "^12.1.1",
+    "@polkadot/api": "^15.3.1",
+    "@polkadot/types": "15.3.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   }

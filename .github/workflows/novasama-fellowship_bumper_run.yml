@@ -1,13 +1,10 @@
-name: Make astar payouts
+name: Bump Novasmaa-Fellowship members and salary
 
 on:
-  pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * MON"
 
 env:
-  PAYOUTS_ACCOUNT_MNEMONIC: ${{ secrets.PAYOUTS_ACCOUNT_MNEMONIC }}
+  BUMP_ACCOUNT_MNEMONIC: ${{ secrets.BUMP_ACCOUNT_MNEMONIC }}
 
 jobs:
   build:
@@ -21,7 +18,7 @@ jobs:
         run: yarn install
 
       - name: Run app
-        run: yarn start:astar
+        run: yarn start:novasama
 
   telegram-notification:
     needs: [build]
@@ -35,6 +32,6 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           message: |
-            💸 Astar payout failed, see logs for details:
+            😕 Novasama-collectives salary and/or memebers bump failed, see logs for details:
 
             Github run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
