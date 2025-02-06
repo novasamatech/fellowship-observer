@@ -1,4 +1,4 @@
-name: Bump Novasmaa-Fellowship members and salary
+name: Bump Novasama-Fellowship members and salary
 
 on:
   workflow_dispatch:
