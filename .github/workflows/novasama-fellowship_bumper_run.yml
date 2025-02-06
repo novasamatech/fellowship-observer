@@ -2,7 +2,8 @@ name: Bump Novasama-Fellowship members and salary
 
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: "0 /8 * * *"
 env:
   BUMP_ACCOUNT_MNEMONIC: ${{ secrets.BUMP_ACCOUNT_MNEMONIC }}
 
